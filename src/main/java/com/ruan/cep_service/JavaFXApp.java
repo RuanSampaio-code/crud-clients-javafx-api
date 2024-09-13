@@ -41,7 +41,7 @@ public class JavaFXApp extends Application {
     }
 
     private void showRegisterPfView() {
-        new com.ruan.cep_service.RegisterPfView().start(new Stage());
+        new com.ruan.cep_service.interface_ui.RegisterPfView().start(new Stage());
     }
 
 //    private void showRegisterPjView() {
