@@ -8,6 +8,7 @@ public class CepServiceApplication {
 	//teste branch
 	public static void main(String[] args) {
 		SpringApplication.run(CepServiceApplication.class, args);
+
 	}
 
 }
