@@ -17,10 +17,10 @@ import lombok.Setter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Endereco {
-
+    private String cep;
     private String logradouro;
     private String bairro;
-    private String cep;
+
     private String numero;
 
     @JsonProperty("complemento")

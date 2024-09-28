@@ -13,13 +13,11 @@ import java.net.http.HttpResponse;
 @Service
 public class Requisicao {
 
-
-    public Endereco retornaJson(String cep) throws IOException, InterruptedException {
+    public Endereco retornaEndereco(String cep) throws IOException, InterruptedException {
 
         String url = "https://viacep.com.br/ws/" + cep + "/json/";
         HttpClient client = HttpClient.newHttpClient();
 
-        //try {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .build();
@@ -33,10 +31,6 @@ public class Requisicao {
 
         //Retorna formato de endereco
         return endereco;
-       // return response.body();
-//        } catch (RuntimeException e) {
-//            return null;
-//            //System.out.println();
-//        }
+
     }
 }

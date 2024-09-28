@@ -1,18 +1,25 @@
 package com.ruan.cep_service;
 
+import com.ruan.cep_service.service.ClienteService;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JavaFXApp extends Application {
+
+    private ClienteService clienteService;
 
     @Override
     public void start(Stage primaryStage) {
+
+
         // Criando botões para cada operação
         Button registerPfButton = new Button("Cadastro Cliente PF");
         Button registerPjButton = new Button("Cadastro Cliente PJ");
@@ -34,13 +41,14 @@ public class JavaFXApp extends Application {
         vbox.getChildren().addAll(registerPfButton, registerPjButton, viewAllButton, updateClientButton, deleteClientButton);
 
         // Criando a cena e definindo o tamanho da janela
-        Scene scene = new Scene(vbox, 400, 350);
+        Scene scene = new Scene(vbox, 500, 450);
         primaryStage.setTitle("Gerenciamento de Clientes");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     private void showRegisterPfView() {
+        // Inicializa a view de registro de PF
         new com.ruan.cep_service.interface_ui.RegisterPfView().start(new Stage());
     }
 
