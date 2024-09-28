@@ -1,5 +1,7 @@
 package com.ruan.cep_service.interface_ui;
 
+import com.ruan.cep_service.domain.endereco.Endereco;
+import com.ruan.cep_service.requisicaoViaCep.Requisicao;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class RegisterPfView extends Application {
 
@@ -30,17 +34,18 @@ public class RegisterPfView extends Application {
         Label bairroLabel = new Label("Bairro:");
         TextField bairroField = new TextField();
 
-        Label numeroLabel = new Label("Número:");
-        TextField numeroField = new TextField();
-
-        Label complementoLabel = new Label("Complemento:");
-        TextField complementoField = new TextField();
-
         Label cidadeLabel = new Label("Cidade:");
         TextField cidadeField = new TextField();
 
         Label ufLabel = new Label("UF:");
         TextField ufField = new TextField();
+
+        // Campos Número e Complemento - movidos para baixo
+        Label numeroLabel = new Label("Número:");
+        TextField numeroField = new TextField();
+
+        Label complementoLabel = new Label("Complemento:");
+        TextField complementoField = new TextField();
 
         Button saveButton = new Button("Salvar");
 
@@ -51,6 +56,7 @@ public class RegisterPfView extends Application {
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
 
+        // Adicionando os componentes ao GridPane
         gridPane.add(nameLabel, 0, 0);
         gridPane.add(nameField, 1, 0);
 
@@ -67,38 +73,50 @@ public class RegisterPfView extends Application {
         gridPane.add(bairroLabel, 0, 4);
         gridPane.add(bairroField, 1, 4);
 
-        gridPane.add(numeroLabel, 0, 5);
-        gridPane.add(numeroField, 1, 5);
+        // Adicionando Cidade e UF antes de Número e Complemento
+        gridPane.add(cidadeLabel, 0, 5);
+        gridPane.add(cidadeField, 1, 5);
 
-        gridPane.add(complementoLabel, 0, 6);
-        gridPane.add(complementoField, 1, 6);
+        gridPane.add(ufLabel, 0, 6);
+        gridPane.add(ufField, 1, 6);
 
-        gridPane.add(cidadeLabel, 0, 7);
-        gridPane.add(cidadeField, 1, 7);
+        // Adicionando Número e Complemento nas últimas linhas
+        gridPane.add(numeroLabel, 0, 7);
+        gridPane.add(numeroField, 1, 7);
 
-        gridPane.add(ufLabel, 0, 8);
-        gridPane.add(ufField, 1, 8);
-
+        gridPane.add(complementoLabel, 0, 8);
+        gridPane.add(complementoField, 1, 8);
         gridPane.add(saveButton, 1, 9);
 
         // Definindo a cena e a janela
         Scene scene = new Scene(gridPane, 400, 400);
-        primaryStage.setTitle("Cadastro Cliente Pessoa Jurídica");
+        primaryStage.setTitle("Cadastro Cliente Pessoa Física");
         primaryStage.setScene(scene);
         primaryStage.show();
 
         // Adicionando funcionalidades aos botões
         searchCepButton.setOnAction(event -> {
             String cep = cepField.getText();
-            // Aqui você deve chamar a API ViaCEP para buscar o endereço
-            // e atualizar os campos de endereço com o endereço obtido
-            // Exemplo fictício:
-            logradouroField.setText("Rua Exemplo");
-            bairroField.setText("Bairro Exemplo");
-            numeroField.setText("123");
-            complementoField.setText("Apto 45");
-            cidadeField.setText("Cidade Exemplo");
-            ufField.setText("XX");
+
+            //Chamando a requisção do CEP
+            Requisicao requisicao = new Requisicao();
+
+            try {
+                //Apontando para os campos da interface
+                Endereco endereco = requisicao.retornaJson(cep);
+                logradouroField.setText(endereco.getLogradouro());
+                bairroField.setText(endereco.getBairro());
+                numeroField.setText(endereco.getNumero());
+                complementoField.setText(endereco.getComplemento());
+                cidadeField.setText(endereco.getCidade());
+                ufField.setText(endereco.getUf());
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
         });
 
         saveButton.setOnAction(event -> {
@@ -110,6 +128,7 @@ public class RegisterPfView extends Application {
             String complemento = complementoField.getText();
             String cidade = cidadeField.getText();
             String uf = ufField.getText();
+
 
             // Aqui você deve implementar a lógica para salvar os dados do cliente PJ
             System.out.println("Nome: " + name);
