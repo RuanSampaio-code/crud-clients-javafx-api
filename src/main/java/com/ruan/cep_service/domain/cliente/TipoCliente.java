@@ -1,5 +1,8 @@
 package com.ruan.cep_service.domain.cliente;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum TipoCliente {
 
     PESSOA_FISICA("PF", "Pessoa Física"),
@@ -13,11 +16,19 @@ public enum TipoCliente {
         this.descricao = descricao;
     }
 
+    @JsonValue
     public String getCodigo() {
         return codigo;
     }
 
-    public String getDescricao() {
-        return descricao;
+
+    @JsonCreator
+    public static TipoCliente fromCodigo(String codigo) {
+        for (TipoCliente tipo : TipoCliente.values()) {
+            if (tipo.getCodigo().equals(codigo)) {
+                return tipo;
+            }
+        }
+        throw new IllegalArgumentException("Tipo de cliente desconhecido: " + codigo);
     }
 }

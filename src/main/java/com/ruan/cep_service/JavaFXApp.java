@@ -1,5 +1,6 @@
 package com.ruan.cep_service;
 
+import com.ruan.cep_service.interface_ui.RegisterPfPjView;
 import com.ruan.cep_service.service.ClienteService;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -8,17 +9,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
-@Component
 public class JavaFXApp extends Application {
 
     private ClienteService clienteService;
 
     @Override
     public void start(Stage primaryStage) {
-
+        // Obtemos o ClienteService do contexto do Spring
+        clienteService = SpringContext.getBean(ClienteService.class);
 
         // Criando botões para cada operação
         Button registerPfButton = new Button("Cadastro Cliente PF");
@@ -28,9 +27,9 @@ public class JavaFXApp extends Application {
         Button deleteClientButton = new Button("Deletar Cliente");
 
         // Adicionando ação aos botões
-        registerPfButton.setOnAction(event -> showRegisterPfView());
-//        registerPjButton.setOnAction(event -> showRegisterPjView());
-//        viewAllButton.setOnAction(event -> showViewAllClientsView());
+        registerPfButton.setOnAction(event -> showRegisterPfPjView());
+        //registerPjButton.setOnAction(event -> showRegisterPjView());
+        //viewAllButton.setOnAction(event -> showViewAllClientsView());
 //        updateClientButton.setOnAction(event -> showUpdateClientView());
 //        deleteClientButton.setOnAction(event -> showDeleteClientView());
 
@@ -47,26 +46,17 @@ public class JavaFXApp extends Application {
         primaryStage.show();
     }
 
-    private void showRegisterPfView() {
-        // Inicializa a view de registro de PF
-        new com.ruan.cep_service.interface_ui.RegisterPfView().start(new Stage());
+    //Tela cadastro de Clientes PF
+    private void showRegisterPfPjView() {
+        RegisterPfPjView registerPfView = SpringContext.getBean(RegisterPfPjView.class);
+        registerPfView.start(new Stage());
     }
 
-//    private void showRegisterPjView() {
-//        new RegisterPjView().start(new Stage());
-//    }
-//
-//    private void showViewAllClientsView() {
-//        new ViewAllClientsView().start(new Stage());
-//    }
-//
-//    private void showUpdateClientView() {
-//        new UpdateClientView().start(new Stage());
-//    }
-//
-//    private void showDeleteClientView() {
-//        new DeleteClientView().start(new Stage());
-//    }
+    //Tela cadastro de Clientes PJ
+    private void showRegisterPjView() {
+        RegisterPfPjView registerPfView = SpringContext.getBean(RegisterPfPjView.class);
+        registerPfView.start(new Stage()); // RegisterPjView
+    }
 
     public static void main(String[] args) {
         launch(args);

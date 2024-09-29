@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.Transient;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ public class ClienteController {
     }
 
     @PostMapping
+    @Transient
     public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente) {
         Cliente savedCliente = clienteService.salvarCliente(cliente);
         return ResponseEntity.ok(savedCliente);
