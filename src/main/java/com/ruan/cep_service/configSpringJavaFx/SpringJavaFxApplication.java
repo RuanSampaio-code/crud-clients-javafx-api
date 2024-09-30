@@ -1,4 +1,4 @@
-package com.ruan.cep_service;
+package com.ruan.cep_service.configSpringJavaFx;
 
 import com.ruan.cep_service.interface_ui.RegisterPfPjView;
 import javafx.application.Application;

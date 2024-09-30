@@ -1,7 +1,6 @@
 package com.ruan.cep_service;
 
-import com.ruan.cep_service.JavaFXApp;
-import com.ruan.cep_service.SpringContext;
+import com.ruan.cep_service.configSpringJavaFx.SpringContext;
 import javafx.application.Application;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

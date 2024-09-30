@@ -1,4 +1,4 @@
-package com.ruan.cep_service;
+package com.ruan.cep_service.configSpringJavaFx;
 
 import org.springframework.context.ApplicationContext;
 
