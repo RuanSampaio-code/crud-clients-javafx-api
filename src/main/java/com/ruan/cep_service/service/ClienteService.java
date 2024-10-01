@@ -22,12 +22,16 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
+//    public List<ClienteDTO> listarTodos() {
+//        return clienteRepository.findAll().stream().map(ClienteDTO::new).toList();
+//    }
+
     public Cliente salvarCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
-    public Optional<Cliente> buscarClientePorId(Long id) {
-        return clienteRepository.findById(id);
+    public Optional<Cliente> buscarClientePorId(String cpfcnpj) {
+        return clienteRepository.findByCpfcnpj(cpfcnpj);
     }
 
     public void deletarCliente(Long id) {
@@ -35,4 +39,6 @@ public class ClienteService {
     }
 
 
+    public void atualizarCliente(Long id, Cliente clienteAtualizado) {
+    }
 }

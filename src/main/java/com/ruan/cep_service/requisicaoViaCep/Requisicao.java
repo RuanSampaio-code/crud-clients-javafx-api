@@ -1,36 +1,44 @@
 package com.ruan.cep_service.requisicaoViaCep;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruan.cep_service.domain.endereco.Endereco;
+import com.ruan.cep_service.domain.endereco.EnderecoDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 @Service
 public class Requisicao {
 
+    private final RestTemplate restTemplate;
+
+    public Requisicao(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     public Endereco retornaEndereco(String cep) throws IOException, InterruptedException {
 
         String url = "https://viacep.com.br/ws/" + cep + "/json/";
-        HttpClient client = HttpClient.newHttpClient();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .build();
+        // Recebe o DTO da API
+        EnderecoDTO enderecoDTO = restTemplate.getForObject(url, EnderecoDTO.class);
 
-        HttpResponse<String> response = client
-                .send(request, HttpResponse.BodyHandlers.ofString());
-
-        // Usa Jackson para converter a string JSON em um objeto Endereco
-        ObjectMapper objectMapper = new ObjectMapper();
-        Endereco endereco = objectMapper.readValue(response.body(), Endereco.class);
+        Endereco endereco = converteParaEndereco(enderecoDTO);
 
         //Retorna formato de endereco
         return endereco;
 
+    }
+
+    private Endereco converteParaEndereco(EnderecoDTO enderecoDTO) {
+
+        Endereco endereco = new Endereco();
+        endereco.setCep(enderecoDTO.cep());
+        endereco.setLogradouro(enderecoDTO.logradouro());
+        endereco.setBairro(enderecoDTO.bairro());
+        endereco.setCidade(enderecoDTO.cidade());
+        endereco.setUf(enderecoDTO.uf());
+
+        return endereco;
     }
 }

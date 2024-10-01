@@ -26,9 +26,9 @@ public class ClienteController {
         return clienteService.findAllClientes();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarCliente(@PathVariable Long id) {
-        Optional<Cliente> cliente = clienteService.buscarClientePorId(id);
+    @GetMapping("/{cpfcpnj}")
+    public ResponseEntity<Cliente> buscarCliente(@PathVariable String cpfcpnj) {
+        Optional<Cliente> cliente = clienteService.buscarClientePorId(cpfcpnj);
         return cliente.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -40,13 +40,13 @@ public class ClienteController {
         return ResponseEntity.ok(savedCliente);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
-        if (clienteService.buscarClientePorId(id).isPresent()) {
-            clienteService.deletarCliente(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deletarCliente(@PathVariable String id) {
+//        if (clienteService.buscarClientePorId(id).isPresent()) {
+//            clienteService.deletarCliente(id);
+//            return ResponseEntity.noContent().build();
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 }

@@ -14,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.security.PrivilegedAction;
@@ -26,6 +27,9 @@ public class RegisterPfPjView {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     private ComboBox<String> tipoClienteComboBox; // Novo campo para selecionar o tipo de cliente
     private TextField nameField;
@@ -143,7 +147,7 @@ public class RegisterPfPjView {
         // Adicionando funcionalidades aos botões
         searchCepButton.setOnAction(event -> {
             String cep = cepField.getText();
-            Requisicao requisicao = new Requisicao();
+            Requisicao requisicao = new Requisicao(restTemplate);
 
             try {
                 Endereco endereco = requisicao.retornaEndereco(cep);
