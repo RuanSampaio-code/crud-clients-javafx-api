@@ -27,7 +27,6 @@ public class RegisterPfPjView {
     @Autowired
     private ClienteService clienteService;
 
-
     private ComboBox<String> tipoClienteComboBox; // Novo campo para selecionar o tipo de cliente
     private TextField nameField;
     private TextField cnpjField;
@@ -102,7 +101,6 @@ public class RegisterPfPjView {
         gridPane.setPadding(new Insets(25, 25, 25, 25));
 
         // Adicionando os componentes ao GridPane
-        // Adicionando os componentes ao GridPane
         gridPane.add(tipoClienteLabel, 0, 0);
         gridPane.add(tipoClienteComboBox, 1, 0); // Adiciona o ComboBox
 
@@ -164,6 +162,7 @@ public class RegisterPfPjView {
             String tipoCliente = String.valueOf(tipoClienteComboBox.getValue()); // Obtém o tipo de cliente
             String name = nameField.getText();
             String cnpj = cnpjField.getText();
+            String email = emailField.getText();
             String telefone = telefoneField.getText();
             String cep = cepField.getText();
             String logradouro = logradouroField.getText();
@@ -186,6 +185,7 @@ public class RegisterPfPjView {
             cliente.setTipo(TipoCliente.valueOf(tipoCliente)); // Adiciona o tipo de cliente
             cliente.setNome(name);
             cliente.setCpfcnpj(cnpj);
+            cliente.setEmail(email);
             cliente.setTelefone(telefone);
             cliente.setEndereco(endereco);
 
