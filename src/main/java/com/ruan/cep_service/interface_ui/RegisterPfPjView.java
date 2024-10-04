@@ -151,16 +151,23 @@ public class RegisterPfPjView {
 
             try {
                 Endereco endereco = requisicao.retornaEndereco(cep);
+                // Preenche os campos de endereço com os dados retornados
                 logradouroField.setText(endereco.getLogradouro());
                 bairroField.setText(endereco.getBairro());
                 numeroField.setText(endereco.getNumero());
                 complementoField.setText(endereco.getComplemento());
                 cidadeField.setText(endereco.getCidade());
                 ufField.setText(endereco.getUf());
-            } catch (IOException | InterruptedException e) {
-                showAlert("Erro", "Não foi possível buscar o endereço. Verifique o CEP e tente novamente.");
+            } catch (IOException e) {
+                showAlert("Erro", "Erro de IO: " + e.getMessage());
+            } catch (InterruptedException e) {
+                showAlert("Erro", "A requisição foi interrompida.");
+            } catch (Exception e) {
+                // Aqui você pode capturar uma exceção específica que indica que o CEP não foi encontrado
+                showAlert("CEP não encontrado", "Não foi possível encontrar o endereço para o CEP: " + cep + ". Verifique o CEP e tente novamente.");
             }
         });
+
 
         saveButton.setOnAction(event -> {
             String tipoCliente = String.valueOf(tipoClienteComboBox.getValue()); // Obtém o tipo de cliente
@@ -192,6 +199,8 @@ public class RegisterPfPjView {
             cliente.setEmail(email);
             cliente.setTelefone(telefone);
             cliente.setEndereco(endereco);
+
+
 
             clienteService.salvarCliente(cliente);
             showAlert("Sucesso", "Cliente cadastrado com sucesso!");
