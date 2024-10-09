@@ -49,9 +49,46 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
-    public void atualizarCliente(Long id, Cliente clienteAtualizado) {
-        // Implementação da atualização do cliente
+    public void atualizarCliente(String cpfcnpj, Cliente clienteAtualizado) {
+        // Buscar o cliente existente no banco de dados pelo ID
+        Optional<Cliente> clienteExistenteOptional = clienteRepository.findByCpfcnpj(cpfcnpj);
+
+        if (clienteExistenteOptional.isPresent()) {
+            Cliente clienteExistente = clienteExistenteOptional.get();
+
+            // Atualizar os dados do cliente
+            clienteExistente.setNome(clienteAtualizado.getNome());
+            clienteExistente.setEmail(clienteAtualizado.getEmail());
+            clienteExistente.setTelefone(clienteAtualizado.getTelefone());
+            clienteExistente.setTipo(clienteAtualizado.getTipo());
+
+            // Atualizar endereço
+            if (clienteAtualizado.getEndereco() != null) {
+                Endereco enderecoExistente = clienteExistente.getEndereco();
+                Endereco enderecoAtualizado = clienteAtualizado.getEndereco();
+
+                if (enderecoExistente == null) {
+                    clienteExistente.setEndereco(new Endereco()); // Inicia um novo endereço se necessário
+                    enderecoExistente = clienteExistente.getEndereco();
+                }
+
+                enderecoExistente.setCep(enderecoAtualizado.getCep());
+                enderecoExistente.setLogradouro(enderecoAtualizado.getLogradouro());
+                enderecoExistente.setBairro(enderecoAtualizado.getBairro());
+                enderecoExistente.setCidade(enderecoAtualizado.getCidade());
+                enderecoExistente.setUf(enderecoAtualizado.getUf());
+                enderecoExistente.setNumero(enderecoAtualizado.getNumero());
+                enderecoExistente.setComplemento(enderecoAtualizado.getComplemento());
+            }
+
+            // Salvar o cliente atualizado no banco de dados
+            clienteRepository.save(clienteExistente);
+        } else {
+            throw new RuntimeException("Cliente com CPF/CNPJ " + cpfcnpj + " não encontrado.");
+        }
     }
+
+
 
     private ClienteDTO converterParaClienteDTO(Cliente cliente) {
         // Usa o método auxiliar para converter o Endereco de forma segura
