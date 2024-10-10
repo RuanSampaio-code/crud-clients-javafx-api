@@ -99,24 +99,24 @@ public class ViewAllClientes {
 
 
         // Adicionando as colunas na tabela
-        tabelaClientes.getColumns().addAll(tipoClienteColumn, nomeColumn, cnpjColumn, emailColumn, telefoneColumn,
-                cepColumn, logradouroColumn, bairroColumn, cidadeColumn, ufColumn, numeroColumn, complementoColumn);
+//        tabelaClientes.getColumns().addAll(tipoClienteColumn, nomeColumn, cnpjColumn, emailColumn, telefoneColumn,
+//                cepColumn, logradouroColumn, bairroColumn, cidadeColumn, ufColumn, numeroColumn, complementoColumn);
 
 
         // Outra forma de adicionar
-        // Adicionando as colunas na tabela
-        // tabelaClientes.getColumns().add(tipoClienteColumn);
-        // tabelaClientes.getColumns().add(nomeColumn);
-        // tabelaClientes.getColumns().add(cnpjColumn);
-        // tabelaClientes.getColumns().add(emailColumn);
-        // tabelaClientes.getColumns().add(telefoneColumn);
-        // tabelaClientes.getColumns().add(cepColumn);
-        // tabelaClientes.getColumns().add(logradouroColumn);
-        // tabelaClientes.getColumns().add(bairroColumn);
-        // tabelaClientes.getColumns().add(cidadeColumn);
-        // tabelaClientes.getColumns().add(ufColumn);
-        // tabelaClientes.getColumns().add(numeroColumn);
-        // tabelaClientes.getColumns().add(complementoColumn);
+         //Adicionando as colunas na tabela
+         tabelaClientes.getColumns().add(tipoClienteColumn);
+         tabelaClientes.getColumns().add(nomeColumn);
+         tabelaClientes.getColumns().add(cnpjColumn);
+         tabelaClientes.getColumns().add(emailColumn);
+         tabelaClientes.getColumns().add(telefoneColumn);
+         tabelaClientes.getColumns().add(cepColumn);
+         tabelaClientes.getColumns().add(logradouroColumn);
+         tabelaClientes.getColumns().add(bairroColumn);
+         tabelaClientes.getColumns().add(cidadeColumn);
+         tabelaClientes.getColumns().add(ufColumn);
+         tabelaClientes.getColumns().add(numeroColumn);
+         tabelaClientes.getColumns().add(complementoColumn);
 
         // Adicionando os dados na tabela
         tabelaClientes.getItems().addAll(listaDeClientes);

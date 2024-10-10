@@ -58,6 +58,7 @@ public class ClienteService {
 
             // Atualizar os dados do cliente
             clienteExistente.setNome(clienteAtualizado.getNome());
+            clienteExistente.setCpfcnpj(clienteAtualizado.getCpfcnpj());
             clienteExistente.setEmail(clienteAtualizado.getEmail());
             clienteExistente.setTelefone(clienteAtualizado.getTelefone());
             clienteExistente.setTipo(clienteAtualizado.getTipo());
@@ -111,11 +112,12 @@ public class ClienteService {
                 .map(e -> new EnderecoDTO(
                         e.getCep(),
                         e.getLogradouro(),
+                        e.getBairro(),
                         e.getCidade(),
                         e.getUf(),
-                        e.getComplemento(),
-                        e.getBairro(),
-                        e.getCep()
+                        e.getNumero(),
+                        e.getComplemento()
+
                 ))
                 // Retorna um EnderecoDTO com valores vazios ou nulos
                 .orElseGet(() -> new EnderecoDTO(
@@ -125,7 +127,7 @@ public class ClienteService {
                         "",    // UF vazio ou padrão
                         "",    // Complemento vazio ou padrão
                         "",    // Bairro vazio ou padrão
-                        ""     // Cep vazio ou padrão
+                        ""// Cep vazio ou padrão
                 ));
     }
 

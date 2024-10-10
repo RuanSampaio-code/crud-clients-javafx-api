@@ -2,6 +2,7 @@ package com.ruan.cep_service.interface_ui;
 
 import com.ruan.cep_service.domain.cliente.Cliente;
 import com.ruan.cep_service.domain.cliente.ClienteDTO;
+import com.ruan.cep_service.domain.cliente.TipoCliente;
 import com.ruan.cep_service.domain.endereco.Endereco;
 import com.ruan.cep_service.service.ClienteService;
 import javafx.geometry.Insets;
@@ -117,6 +118,7 @@ public class ViewUpdateCliente {
             clienteAtualizado.setNome(nomeField.getText());
             clienteAtualizado.setEmail(emailField.getText());
             clienteAtualizado.setTelefone(telefoneField.getText());
+            clienteAtualizado.setTipo(TipoCliente.valueOf(tipoField.getText()));
 
             // Criar um novo endereço com os dados atualizados
             Endereco enderecoAtualizado = new Endereco();
