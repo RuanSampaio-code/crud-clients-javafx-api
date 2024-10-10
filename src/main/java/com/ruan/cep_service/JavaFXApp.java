@@ -4,6 +4,7 @@ import com.ruan.cep_service.configSpringJavaFx.SpringContext;
 import com.ruan.cep_service.interface_ui.RegisterPfPjView;
 import com.ruan.cep_service.interface_ui.ViewAllClientes;
 import com.ruan.cep_service.interface_ui.ViewOneCliente;
+import com.ruan.cep_service.interface_ui.ViewUpdateCliente;
 import com.ruan.cep_service.service.ClienteService;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -72,7 +73,8 @@ public class JavaFXApp extends Application {
 
     //Tela de alteraçao de clientes especifico
     private void showUpdateClientView(){
-
+        ViewUpdateCliente viewUpdateCliente = SpringContext.getBean(ViewUpdateCliente.class);
+        viewUpdateCliente.start(new Stage());
 
     }
 

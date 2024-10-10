@@ -1,13 +1,13 @@
 package com.ruan.cep_service.interface_ui;
 
-import com.ruan.cep_service.domain.cliente.Cliente;
+import com.ruan.cep_service.domain.cliente.ClienteDTO;
 import com.ruan.cep_service.service.ClienteService;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
+
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ public class ViewAllClientes {
     @Autowired
     private ClienteService clienteService;
 
-    private TableView<Cliente> tabelaClientes;
+    private TableView<ClienteDTO> tabelaClientes;
 
     public void start(Stage stageTabelaDeClientes) {
-        List<Cliente> listaDeClientes = clienteService.findAllClientes();
+        List<ClienteDTO> listaDeClientes = clienteService.findAllClientes();
 
         // Imprindo no console os clientes
-        for (Cliente cliente : listaDeClientes) {
+        for (ClienteDTO cliente : listaDeClientes) {
             System.out.println(cliente);
         }
 
@@ -35,84 +35,88 @@ public class ViewAllClientes {
         tabelaClientes = new TableView<>();
 
         // Colunas - info do cliente
-        TableColumn<Cliente, String> tipoClienteColumn = new TableColumn<>("Tipo de Cliente");
-        tipoClienteColumn.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        TableColumn<ClienteDTO, String> tipoClienteColumn = new TableColumn<>("Tipo de Cliente");
+        tipoClienteColumn.setCellValueFactory(cellData ->
+                safeValue(cellData.getValue().tipo() != null ? cellData.getValue().tipo().name() : null)
+        );
 
-        TableColumn<Cliente, String> nomeColumn = new TableColumn<>("Nome");
-        nomeColumn.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        // Colunas - info do cliente
+        TableColumn<ClienteDTO, String> nomeColumn = new TableColumn<>("Nome");
+        nomeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().nome()));
 
-        TableColumn<Cliente, String> cnpjColumn = new TableColumn<>("CPF/CNPJ");
-        cnpjColumn.setCellValueFactory(new PropertyValueFactory<>("cpfcnpj"));
+        TableColumn<ClienteDTO, String> cnpjColumn = new TableColumn<>("CPF/CNPJ");
+        cnpjColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().cpfcnpj()));
 
-        TableColumn<Cliente, String> emailColumn = new TableColumn<>("Email");
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        TableColumn<ClienteDTO, String> emailColumn = new TableColumn<>("Email");
+        emailColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().email()));
 
-        TableColumn<Cliente, String> telefoneColumn = new TableColumn<>("Telefone");
-        telefoneColumn.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+        TableColumn<ClienteDTO, String> telefoneColumn = new TableColumn<>("Telefone");
+        telefoneColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().telefone()));
 
 
         // Colunas - Endereco do cliente
-        TableColumn<Cliente, String> cepColumn = new TableColumn<>("CEP");
+        TableColumn<ClienteDTO, String> cepColumn = new TableColumn<>("CEP");
         cepColumn.setCellValueFactory(cellData -> {
-            String cep = cellData.getValue().getEndereco() != null ? cellData.getValue().getEndereco().getCep() : null;
+            String cep = cellData.getValue().endereco() != null ? cellData.getValue().endereco().cep() : null;
             return safeValue(cep);
         });
 
-        TableColumn<Cliente, String> logradouroColumn = new TableColumn<>("Logradouro");
+        TableColumn<ClienteDTO, String> logradouroColumn = new TableColumn<>("Logradouro");
         logradouroColumn.setCellValueFactory(cellData -> {
-            String logradouro = cellData.getValue().getEndereco() != null ? cellData.getValue().getEndereco().getLogradouro() : null;
+            String logradouro = cellData.getValue().endereco() != null ? cellData.getValue().endereco().logradouro() : null;
             return safeValue(logradouro);
         });
 
-        TableColumn<Cliente, String> bairroColumn = new TableColumn<>("Bairro");
+        TableColumn<ClienteDTO, String> bairroColumn = new TableColumn<>("Bairro");
         bairroColumn.setCellValueFactory(cellData -> {
-            String bairro = cellData.getValue().getEndereco() != null ? cellData.getValue().getEndereco().getBairro() : null;
+            String bairro = cellData.getValue().endereco() != null ? cellData.getValue().endereco().bairro() : null;
             return safeValue(bairro);
         });
 
-        TableColumn<Cliente, String> cidadeColumn = new TableColumn<>("Cidade");
+        TableColumn<ClienteDTO, String> cidadeColumn = new TableColumn<>("Cidade");
         cidadeColumn.setCellValueFactory(cellData -> {
-            String cidade = cellData.getValue().getEndereco() != null ? cellData.getValue().getEndereco().getCidade() : null;
+            String cidade = cellData.getValue().endereco() != null ? cellData.getValue().endereco().cidade() : null;
             return safeValue(cidade);
         });
 
-        TableColumn<Cliente, String> ufColumn = new TableColumn<>("UF");
+        TableColumn<ClienteDTO, String> ufColumn = new TableColumn<>("UF");
         ufColumn.setCellValueFactory(cellData -> {
-            String uf = cellData.getValue().getEndereco() != null ? cellData.getValue().getEndereco().getUf() : null;
+            String uf = cellData.getValue().endereco() != null ? cellData.getValue().endereco().uf() : null;
             return safeValue(uf);
         });
 
-        TableColumn<Cliente, String> numeroColumn = new TableColumn<>("Número");
+        TableColumn<ClienteDTO, String> numeroColumn = new TableColumn<>("Número");
         numeroColumn.setCellValueFactory(cellData -> {
-            String numero = cellData.getValue().getEndereco() != null ? cellData.getValue().getEndereco().getNumero() : null;
+            String numero = cellData.getValue().endereco() != null ? cellData.getValue().endereco().numero() : null;
             return safeValue(numero);
         });
 
-        TableColumn<Cliente, String> complementoColumn = new TableColumn<>("Complemento");
+        TableColumn<ClienteDTO, String> complementoColumn = new TableColumn<>("Complemento");
         complementoColumn.setCellValueFactory(cellData -> {
-            String complemento = cellData.getValue().getEndereco() != null ? cellData.getValue().getEndereco().getComplemento() : null;
+            String complemento = cellData.getValue().endereco() != null ? cellData.getValue().endereco().complemento() : null;
             return safeValue(complemento);
         });
 
+
         // Adicionando as colunas na tabela
-        tabelaClientes.getColumns().addAll(tipoClienteColumn, nomeColumn, cnpjColumn, emailColumn, telefoneColumn,
-                cepColumn, logradouroColumn, bairroColumn, cidadeColumn, ufColumn, numeroColumn, complementoColumn);
+//        tabelaClientes.getColumns().addAll(tipoClienteColumn, nomeColumn, cnpjColumn, emailColumn, telefoneColumn,
+//                cepColumn, logradouroColumn, bairroColumn, cidadeColumn, ufColumn, numeroColumn, complementoColumn);
 
 
         // Outra forma de adicionar
-        // Adicionando as colunas na tabela
-        // tabelaClientes.getColumns().add(tipoClienteColumn);
-        // tabelaClientes.getColumns().add(nomeColumn);
-        // tabelaClientes.getColumns().add(cnpjColumn);
-        // tabelaClientes.getColumns().add(emailColumn);
-        // tabelaClientes.getColumns().add(telefoneColumn);
-        // tabelaClientes.getColumns().add(cepColumn);
-        // tabelaClientes.getColumns().add(logradouroColumn);
-        // tabelaClientes.getColumns().add(bairroColumn);
-        // tabelaClientes.getColumns().add(cidadeColumn);
-        // tabelaClientes.getColumns().add(ufColumn);
-        // tabelaClientes.getColumns().add(numeroColumn);
-        // tabelaClientes.getColumns().add(complementoColumn);
+         //Adicionando as colunas na tabela
+         tabelaClientes.getColumns().add(tipoClienteColumn);
+         tabelaClientes.getColumns().add(nomeColumn);
+         tabelaClientes.getColumns().add(cnpjColumn);
+         tabelaClientes.getColumns().add(emailColumn);
+         tabelaClientes.getColumns().add(telefoneColumn);
+         tabelaClientes.getColumns().add(cepColumn);
+         tabelaClientes.getColumns().add(logradouroColumn);
+         tabelaClientes.getColumns().add(bairroColumn);
+         tabelaClientes.getColumns().add(cidadeColumn);
+         tabelaClientes.getColumns().add(ufColumn);
+         tabelaClientes.getColumns().add(numeroColumn);
+         tabelaClientes.getColumns().add(complementoColumn);
 
         // Adicionando os dados na tabela
         tabelaClientes.getItems().addAll(listaDeClientes);
