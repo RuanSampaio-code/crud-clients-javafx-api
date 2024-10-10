@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
@@ -24,11 +25,11 @@ public class ClienteService {
     public List<ClienteDTO> findAllClientes() {
         // ClienteD cliente = clienteRepository.findAll();
 
-        List<Cliente> clientes = clienteRepository.findAll();
-
-        return clientes.stream()
+        // Aqui você pode filtrar para retornar apenas os clientes ativos
+        return clienteRepository.findByAtivoTrue()
+                .stream()
                 .map(this::converterParaClienteDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public ClienteDTO salvarCliente(Cliente cliente) {
@@ -40,18 +41,14 @@ public class ClienteService {
     }
 
     public Optional<ClienteDTO> buscarClientePorId(String cpfcnpj) {
-        Optional<Cliente> optionalCliente = clienteRepository.findByCpfcnpj(cpfcnpj);
+        Optional<Cliente> optionalCliente = clienteRepository.findByCpfcnpjAndAtivoTrue(cpfcnpj);
         return optionalCliente.map(this::converterParaClienteDTO);
     }
 
 
-    public void deletarCliente(Long id) {
-        clienteRepository.deleteById(id);
-    }
-
     public void atualizarCliente(String cpfcnpj, Cliente clienteAtualizado) {
         // Buscar o cliente existente no banco de dados pelo ID
-        Optional<Cliente> clienteExistenteOptional = clienteRepository.findByCpfcnpj(cpfcnpj);
+        Optional<Cliente> clienteExistenteOptional = clienteRepository.findByCpfcnpjAndAtivoTrue(cpfcnpj);
 
         if (clienteExistenteOptional.isPresent()) {
             Cliente clienteExistente = clienteExistenteOptional.get();
@@ -87,6 +84,16 @@ public class ClienteService {
         } else {
             throw new RuntimeException("Cliente com CPF/CNPJ " + cpfcnpj + " não encontrado.");
         }
+    }
+
+
+
+    public void deletarClientePorCpfCnpj(String cpfcnpj) {
+        Optional<Cliente> clienteOpt = clienteRepository.findByCpfcnpjAndAtivoTrue(cpfcnpj);
+        clienteOpt.ifPresent(cliente -> {
+            cliente.setAtivo(false);
+            clienteRepository.save(cliente);
+        });
     }
 
 

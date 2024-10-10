@@ -41,6 +41,16 @@ public class ClienteController {
         return ResponseEntity.ok(savedCliente);
     }
 
+    @DeleteMapping("/{cpfcnpj}")
+    public ResponseEntity<Void> deletarCliente(@PathVariable String cpfcnpj) {
+        if (clienteService.buscarClientePorId(cpfcnpj).isPresent()) {
+            clienteService.deletarClientePorCpfCnpj(cpfcnpj);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 //    @DeleteMapping("/{id}")
 //    public ResponseEntity<Void> deletarCliente(@PathVariable String id) {
 //        if (clienteService.buscarClientePorId(id).isPresent()) {

@@ -10,6 +10,7 @@ public record ClienteDTO(
         String telefone,
         String cpfcnpj,
         TipoCliente tipo,
+        //Boolean ativo,
         EnderecoDTO endereco
 ) {
 

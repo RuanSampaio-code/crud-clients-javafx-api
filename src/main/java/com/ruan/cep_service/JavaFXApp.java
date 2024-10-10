@@ -35,7 +35,7 @@ public class JavaFXApp extends Application {
         viewAllButton.setOnAction(event -> showViewAllClientsView());
         viewOneClienteButton.setOnAction(event -> showViewOneCliente());
         updateClientButton.setOnAction(event -> showUpdateClientView());
-//        deleteClientButton.setOnAction(event -> showDeleteClientView());
+        deleteClientButton.setOnAction(event -> showDeleteClientView());
 
         // Criando o layout (VBox) e adicionando os botões
         VBox vbox = new VBox(10);
@@ -49,6 +49,7 @@ public class JavaFXApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
 
     //Tela cadastro de Clientes
     private void showRegisterPfPjView() {
@@ -77,6 +78,14 @@ public class JavaFXApp extends Application {
         viewUpdateCliente.start(new Stage());
 
     }
+
+    //Tela para deletar clientes
+
+    private void showDeleteClientView() {
+        ViewDeleteCliente viewDeleteCliente = SpringContext.getBean(ViewDeleteCliente.class);
+        viewDeleteCliente.start(new Stage());
+    }
+
 
     public static void main(String[] args) {
         launch(args);

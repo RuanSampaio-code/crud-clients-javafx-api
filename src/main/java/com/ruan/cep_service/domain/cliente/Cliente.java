@@ -28,5 +28,7 @@ public class Cliente {
     @Embedded
     private Endereco endereco;
 
+    private boolean ativo = true;
+
 
 }
