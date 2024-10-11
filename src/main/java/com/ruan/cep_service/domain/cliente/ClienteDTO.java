@@ -10,18 +10,9 @@ public record ClienteDTO(
         String telefone,
         String cpfcnpj,
         TipoCliente tipo,
+        //Boolean ativo,
         EnderecoDTO endereco
 ) {
 
-     //Construtor que recebe a entidade Cliente
-//    public ClienteDTO(Cliente cliente) {
-//        this(
-//                cliente.getId(),
-//                cliente.getNome(),
-//                cliente.getEmail(),
-//                cliente.getTelefone(),
-//                cliente.getCpfcnpj(),
-//                new EnderecoDTO(cliente.getEndereco())  // Conversão do Endereco para DTO
-//        );
-//    }
+
 }

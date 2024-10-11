@@ -22,6 +22,7 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
+
     @GetMapping
     public List<ClienteDTO> getAllClientes() {
         return clienteService.findAllClientes();
@@ -39,6 +40,16 @@ public class ClienteController {
     public ResponseEntity<ClienteDTO> criarCliente(@RequestBody Cliente cliente) {
         ClienteDTO savedCliente = clienteService.salvarCliente(cliente);
         return ResponseEntity.ok(savedCliente);
+    }
+
+    @DeleteMapping("/{cpfcnpj}")
+    public ResponseEntity<Void> deletarCliente(@PathVariable String cpfcnpj) {
+        if (clienteService.buscarClientePorId(cpfcnpj).isPresent()) {
+            clienteService.deletarClientePorCpfCnpj(cpfcnpj);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 //    @DeleteMapping("/{id}")

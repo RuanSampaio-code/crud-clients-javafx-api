@@ -10,69 +10,67 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
 
     private ClienteRepository clienteRepository;
 
+    // Injeção de dependência do ClienteRepository
     @Autowired
     public ClienteService(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
+    // Retorna todos os clientes ativos no banco de dados
     public List<ClienteDTO> findAllClientes() {
-        // ClienteD cliente = clienteRepository.findAll();
-
-        List<Cliente> clientes = clienteRepository.findAll();
-
-        return clientes.stream()
+        // Filtra e mapeia os clientes ativos para ClienteDTO
+        return clienteRepository.findByAtivoTrue()
+                .stream()
                 .map(this::converterParaClienteDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
 
+    // Salva um novo cliente e retorna seu DTO
     public ClienteDTO salvarCliente(Cliente cliente) {
-        // Salva o cliente no banco de dados
         Cliente clienteSalvo = clienteRepository.save(cliente);
-
-        // Retorna o ClienteDTO a partir do cliente salvo
         return converterParaClienteDTO(clienteSalvo);
     }
 
+    // Busca um cliente pelo CPF/CNPJ, retornando um Optional de ClienteDTO se encontrado
     public Optional<ClienteDTO> buscarClientePorId(String cpfcnpj) {
-        Optional<Cliente> optionalCliente = clienteRepository.findByCpfcnpj(cpfcnpj);
+        Optional<Cliente> optionalCliente = clienteRepository.findByCpfcnpjAndAtivoTrue(cpfcnpj);
         return optionalCliente.map(this::converterParaClienteDTO);
     }
 
-
-    public void deletarCliente(Long id) {
-        clienteRepository.deleteById(id);
-    }
-
+    // Atualiza os dados de um cliente existente
     public void atualizarCliente(String cpfcnpj, Cliente clienteAtualizado) {
-        // Buscar o cliente existente no banco de dados pelo ID
-        Optional<Cliente> clienteExistenteOptional = clienteRepository.findByCpfcnpj(cpfcnpj);
+        // Busca o cliente existente no banco de dados
+        Optional<Cliente> clienteExistenteOptional = clienteRepository.findByCpfcnpjAndAtivoTrue(cpfcnpj);
 
         if (clienteExistenteOptional.isPresent()) {
             Cliente clienteExistente = clienteExistenteOptional.get();
 
-            // Atualizar os dados do cliente
+            // Atualiza os campos principais do cliente
             clienteExistente.setNome(clienteAtualizado.getNome());
             clienteExistente.setCpfcnpj(clienteAtualizado.getCpfcnpj());
             clienteExistente.setEmail(clienteAtualizado.getEmail());
             clienteExistente.setTelefone(clienteAtualizado.getTelefone());
             clienteExistente.setTipo(clienteAtualizado.getTipo());
 
-            // Atualizar endereço
+            // Atualiza o endereço do cliente, se fornecido
             if (clienteAtualizado.getEndereco() != null) {
                 Endereco enderecoExistente = clienteExistente.getEndereco();
                 Endereco enderecoAtualizado = clienteAtualizado.getEndereco();
 
+                // Se o cliente não tem um endereço, cria um novo
                 if (enderecoExistente == null) {
-                    clienteExistente.setEndereco(new Endereco()); // Inicia um novo endereço se necessário
+                    clienteExistente.setEndereco(new Endereco());
                     enderecoExistente = clienteExistente.getEndereco();
                 }
 
+                // Atualiza os campos do endereço
                 enderecoExistente.setCep(enderecoAtualizado.getCep());
                 enderecoExistente.setLogradouro(enderecoAtualizado.getLogradouro());
                 enderecoExistente.setBairro(enderecoAtualizado.getBairro());
@@ -82,20 +80,25 @@ public class ClienteService {
                 enderecoExistente.setComplemento(enderecoAtualizado.getComplemento());
             }
 
-            // Salvar o cliente atualizado no banco de dados
+            // Salva o cliente atualizado
             clienteRepository.save(clienteExistente);
         } else {
             throw new RuntimeException("Cliente com CPF/CNPJ " + cpfcnpj + " não encontrado.");
         }
     }
 
+    // Marca o cliente como inativo para exclusão lógica
+    public void deletarClientePorCpfCnpj(String cpfcnpj) {
+        Optional<Cliente> clienteOpt = clienteRepository.findByCpfcnpjAndAtivoTrue(cpfcnpj);
+        clienteOpt.ifPresent(cliente -> {
+            cliente.setAtivo(false);
+            clienteRepository.save(cliente);
+        });
+    }
 
-
+    // Converte Cliente para ClienteDTO, incluindo endereço
     private ClienteDTO converterParaClienteDTO(Cliente cliente) {
-        // Usa o método auxiliar para converter o Endereco de forma segura
         EnderecoDTO enderecoDTO = converterParaEnderecoDTO(cliente.getEndereco());
-
-        // Converte o cliente para ClienteDTO, incluindo o EnderecoDTO
         return new ClienteDTO(
                 cliente.getId(),
                 cliente.getNome(),
@@ -107,6 +110,7 @@ public class ClienteService {
         );
     }
 
+    // Converte Endereco para EnderecoDTO, retornando um DTO vazio se o endereço for nulo
     private EnderecoDTO converterParaEnderecoDTO(Endereco endereco) {
         return Optional.ofNullable(endereco)
                 .map(e -> new EnderecoDTO(
@@ -117,18 +121,16 @@ public class ClienteService {
                         e.getUf(),
                         e.getNumero(),
                         e.getComplemento()
-
                 ))
-                // Retorna um EnderecoDTO com valores vazios ou nulos
+                // Retorna um EnderecoDTO com valores padrão
                 .orElseGet(() -> new EnderecoDTO(
-                        "",    // Cep vazio ou padrão
-                        "",    // Logradouro vazio ou padrão
-                        "",    // Cidade vazia ou padrão
-                        "",    // UF vazio ou padrão
-                        "",    // Complemento vazio ou padrão
-                        "",    // Bairro vazio ou padrão
-                        ""// Cep vazio ou padrão
+                        "", // CEP padrão
+                        "", // Logradouro padrão
+                        "", // Bairro padrão
+                        "", // Cidade padrão
+                        "", // UF padrão
+                        "", // Número padrão
+                        ""  // Complemento padrão
                 ));
     }
-
 }
