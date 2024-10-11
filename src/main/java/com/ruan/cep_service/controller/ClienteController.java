@@ -22,6 +22,7 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
+
     @GetMapping
     public List<ClienteDTO> getAllClientes() {
         return clienteService.findAllClientes();

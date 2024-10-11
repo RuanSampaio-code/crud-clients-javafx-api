@@ -1,10 +1,7 @@
 package com.ruan.cep_service;
 
 import com.ruan.cep_service.configSpringJavaFx.SpringContext;
-import com.ruan.cep_service.interface_ui.RegisterPfPjView;
-import com.ruan.cep_service.interface_ui.ViewAllClientes;
-import com.ruan.cep_service.interface_ui.ViewOneCliente;
-import com.ruan.cep_service.interface_ui.ViewUpdateCliente;
+import com.ruan.cep_service.interface_ui.*;
 import com.ruan.cep_service.service.ClienteService;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -13,9 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JavaFXApp extends Application {
 
+    @Autowired
     private ClienteService clienteService;
 
     @Override
