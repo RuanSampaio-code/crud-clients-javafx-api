@@ -1,6 +1,7 @@
 package com.ruan.cep_service.interface_ui;
 
 import com.ruan.cep_service.domain.cliente.Cliente;
+import com.ruan.cep_service.domain.cliente.ClienteDTO;
 import com.ruan.cep_service.domain.cliente.ClienteRepository;
 import com.ruan.cep_service.domain.cliente.TipoCliente;
 import com.ruan.cep_service.domain.endereco.Endereco;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.security.PrivilegedAction;
+import java.util.Optional;
 
 @Component
 public class RegisterPfPjView {
@@ -144,7 +146,7 @@ public class RegisterPfPjView {
 
         // Definindo a cena e a janela
         Scene scene = new Scene(gridPane, 450, 450);
-        primaryStage.setTitle("Cadastro Cliente Pessoa Física");
+        primaryStage.setTitle("Cadastro de Cliente");
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -175,6 +177,8 @@ public class RegisterPfPjView {
         });
 
 
+
+
         saveButton.setOnAction(event -> {
             String tipoCliente = String.valueOf(tipoClienteComboBox.getValue()); // Obtém o tipo de cliente
             String name = nameField.getText();
@@ -188,6 +192,34 @@ public class RegisterPfPjView {
             String uf = ufField.getText();
             String numero = numeroField.getText();
             String complemento = complementoField.getText();
+
+            Label mensagemErro = new Label();
+            mensagemErro.setStyle("-fx-text-fill: red;");
+
+
+
+            if(name.isEmpty() || cnpj.isEmpty() || email.isEmpty() ){
+
+                showAlert("Por favor, preencha todos os campos obrigatórios.", "Dados não encontrados");
+
+                // Define borda vermelha para os campos vazios
+                nameField.setStyle(name.isEmpty() ? "-fx-border-color: red;" : "");
+                cnpjField.setStyle(cnpj.isEmpty() ? "-fx-border-color: red;" : "");
+                emailField.setStyle(email.isEmpty() ? "-fx-border-color: red;" : "");
+
+                return;
+
+            }
+
+            // Verifica se o CPF/CNPJ já está cadastrado
+            Optional<ClienteDTO> existingCliente = clienteService.buscarClientePorId(cnpj);
+            if (existingCliente.isPresent()) {
+                showAlert("Erro", "Erro: CPF/CNPJ já cadastrado.");
+                cnpjField.setStyle("-fx-border-color: red;");
+                return;
+            }
+
+
 
             Endereco endereco = new Endereco();
             endereco.setCep(cep);
@@ -209,6 +241,11 @@ public class RegisterPfPjView {
 
 
             clienteService.salvarCliente(cliente);
+
+            //remove o estilo para os preenchidos
+            nameField.setStyle(name.isEmpty() ? "-fx-border-color: red;" : null);
+            cnpjField.setStyle(cnpj.isEmpty() ? "-fx-border-color: red;" : null);
+            emailField.setStyle(email.isEmpty() ? "-fx-border-color: red;" : null);
             showAlert("Sucesso", "Cliente cadastrado com sucesso!");
 
             // Lógica para mostrar os dados do cliente
