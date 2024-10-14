@@ -1,5 +1,5 @@
 
-#CRUD de Clientes com JavaFX consumindo api Via Cep
+# CRUD de Clientes com JavaFX consumindo api Via Cep
 
 Este projeto é uma aplicação de interface gráfica desenvolvida em Java utilizando JavaFX, que permite o gerenciamento de clientes. A aplicação permite cadastrar, editar, excluir e visualizar clientes, diferenciando entre Pessoa Física (CPF) e Pessoa Jurídica (CNPJ). Além disso, a aplicação possui integração com a API Via CEP para buscar informações de endereço ao inserir o CEP.
 
